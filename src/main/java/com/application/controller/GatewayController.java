@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.application.model.Link;
-import com.application.model.RoleCategory;
-import com.application.model.Roles;
+import com.app.manager.model.Link;
+import com.app.manager.model.RoleCategory;
+import com.app.manager.model.Roles;
 import com.application.repo.LinkRepository;
 import com.application.repo.RoleRepository;
 import com.application.repo.RolesCategoriesRepository;

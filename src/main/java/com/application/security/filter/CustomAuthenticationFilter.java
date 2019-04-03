@@ -11,17 +11,28 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.application.locator.component.DBUrlComponent;
+/**
+ * 
+ * @author Patar Timotius
+ * 
+ * Since no plugin for these authentication, we need to create one.
+ * it is extended from OncePerRequestFilter
+ *
+ */
 @Component
 public class CustomAuthenticationFilter extends OncePerRequestFilter{
 	
 	 private Logger logger = LoggerFactory.getLogger(CustomAuthenticationFilter.class);
-
+    
+	 @Autowired
+	 private DBUrlComponent dbUrlComponent;
+	 
 	
 	
 	private  RemoteTokenServices remoteTokenServices;
@@ -38,20 +49,17 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter{
 		
 		
 		String headerAuthorization = request.getHeader("Authorization");
-		
-		
-		
-		
 		if(headerAuthorization != null )
 		{
-		
+			
 			
 			if(headerAuthorization.contains("Bearer")) {
 			headerAuthorization = headerAuthorization.replaceAll("Bearer","");
 			headerAuthorization = headerAuthorization.trim();
-			
 			logger.info("header:"+headerAuthorization);
+			logger.info("url : "+request.getRequestURL());
 			try {
+	
 				OAuth2Authentication oauth2Authentication = remoteTokenServices.loadAuthentication(headerAuthorization);
 				if(oauth2Authentication != null) {
 					SecurityContextHolder.getContext().setAuthentication(oauth2Authentication);

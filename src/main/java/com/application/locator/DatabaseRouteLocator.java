@@ -1,9 +1,11 @@
 package com.application.locator;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,11 +19,22 @@ import org.springframework.cloud.netflix.zuul.filters.ZuulProperties.ZuulRoute;
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.stereotype.Service;
 
+import com.app.manager.model.AuthenticationProvider;
+import com.app.manager.model.GatewayConfig;
+import com.app.manager.model.Link;
 import com.application.locator.component.DBUrlComponent;
-import com.application.model.GatewayConfig;
-import com.application.model.Link;
+import com.application.repo.AuthenticationProviderRepository;
 import com.application.services.GatewayService;
 import com.application.services.LinkService;
+
+/**
+ * 
+ * @author Patar Timotius
+ * 
+ * Database Route Locator based on RefreshRouteLocator, but we need to extend it 
+ * to read from database
+ *
+ */
 
 @Service
 @ConditionalOnProperty(name="gateway.locator", havingValue="db")
@@ -46,7 +59,8 @@ public class DatabaseRouteLocator extends SimpleRouteLocator implements Refresha
 	 private RemoteTokenServices tokenService;
 	 
 	 
-	 
+	 @Autowired
+	 private AuthenticationProviderRepository authenticationProviderRepo;
 	 
 	
 	 private Logger logger = LoggerFactory.getLogger(DatabaseRouteLocator.class);
@@ -65,40 +79,41 @@ public class DatabaseRouteLocator extends SimpleRouteLocator implements Refresha
 	
 	
 	protected Map<String, ZuulRoute> locateRoutes() {
-		logger.info("locate routes..II");
-		logger.info("size="+linkService.getActiveLinks().size());
 		LinkedHashMap<String, ZuulRoute> routesMap = new LinkedHashMap<String, ZuulRoute>();
 		List<Link> ls =  new ArrayList<Link>();
 		Map<String,ZuulRoute> oldRoute = super.locateRoutes();
-		mapsOfLocator.putAll(super.locateRoutes());
+		mapsOfLocator.clear();
 		for(Link l:linkService.getActiveLinks()) {
-				l.setNew(false);
-				ls.add(l);
 				ZuulRoute zuulRoute = new ZuulRoute();
 				String id = Long.toString(l.getLinkId())+"-"+l.getServiceId();
 				id = l.getServiceId();
 				zuulRoute.setId(id);
 				zuulRoute.setPath(l.getPath());
 				zuulRoute.setUrl(l.getUrl());
-				String p = l.getServiceId();
+				zuulRoute.setStripPrefix(l.isStripPrefix());
+				if(l.getSensitiveHeaders().size()>0) {
+					Set<String> head = new HashSet<String>();
+					for(String s:l.getSensitiveHeaders()) {
+						head.add(s.trim());
+					}
+					zuulRoute.setSensitiveHeaders(head);
+				}
+			/*
+			 * zuulRoute.setStripPrefix(false); Set<String> head = new HashSet<String>();
+			 * head.add("Cookie"); head.add("Set-Cookie");
+			 * zuulRoute.setSensitiveHeaders(head);
+			 */	String p = l.getServiceId();
 				mapsOfLocator.put(l.getPath(),zuulRoute);
 		}
 		
-		for(Link l:linkService.getNonActiveLinks()) {
-				mapsOfLocator.remove(l.getPath());
-				l.setNew(false);
-				ls.add(l);
-		}
 		
 		
-		if(ls.size()>0)
-		linkService.update(ls);
-			
 		for(String k:mapsOfLocator.keySet()) {
 			logger.info("route k="+k+":"+mapsOfLocator.get(k));
 		}
 		
 		this.reloadNewUrl();
+		this.reloadProviderAuthentication();
 		this.reloadConfig();
 		return mapsOfLocator;
 	}
@@ -111,12 +126,8 @@ public class DatabaseRouteLocator extends SimpleRouteLocator implements Refresha
     	List<Link> ls =  new ArrayList<Link>();
 		if(newchange.size()>0) {
    			for(Link l : newchange){
-   				l.setNewUrl(false);
-   				ls.add(l);
    				dbUrlComponent.put(l.getPath().trim(), l);
    			};
-   			if(ls.size()>0)
-   				linkService.update(ls);
    		};
    	}
  	
@@ -127,20 +138,17 @@ public class DatabaseRouteLocator extends SimpleRouteLocator implements Refresha
 		if(newchange.size()>0) {
    			 
    			for(GatewayConfig l : newchange){
-   				l.setNew(false);
-   				
-   				if(l.getKey().trim().equals("gateway.locator.prop.remote.token.clientid")){
-   					tokenService.setClientId(l.getValue());
-   	   			}
-   				if(l.getKey().trim().equals("gateway.locator.prop.remote.token.clientsecret")){
-   					tokenService.setClientSecret(l.getValue());
-   	   			}
-   				
-   				if(l.getKey().trim().equals("gateway.locator.prop.remote.token.services")){
-   					tokenService.setCheckTokenEndpointUrl(l.getValue());
-   	   			}
-   				ls.add(l);
-   				
+				/*
+				 * l.setNew(false);
+				 * 
+				 * if(l.getKey().trim().equals("gateway.locator.prop.remote.token.clientid")){
+				 * tokenService.setClientId(l.getValue()); }
+				 * if(l.getKey().trim().equals("gateway.locator.prop.remote.token.clientsecret")
+				 * ){ tokenService.setClientSecret(l.getValue()); }
+				 * 
+				 * if(l.getKey().trim().equals("gateway.locator.prop.remote.token.services")){
+				 * tokenService.setCheckTokenEndpointUrl(l.getValue()); } ls.add(l);
+				 */
    			};
    			if(ls.size()>0)
    				gatewayService.update(ls);
@@ -148,6 +156,13 @@ public class DatabaseRouteLocator extends SimpleRouteLocator implements Refresha
    	}
 	
 	
-			
+	private void reloadProviderAuthentication() {
+		List<AuthenticationProvider> providerList = authenticationProviderRepo.findByActiveTrue();
+		for(AuthenticationProvider provider:providerList) {
+			dbUrlComponent.putProviderId(provider.getProviderId(),provider);
+		}
+	}
+	   			
+	
 
 }

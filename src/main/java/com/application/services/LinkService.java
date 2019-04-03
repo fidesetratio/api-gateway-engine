@@ -8,7 +8,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.application.model.Link;
+import com.app.manager.model.Link;
 import com.application.repo.LinkRepository;
 
 @Service
@@ -19,26 +19,13 @@ public class LinkService {
 		
 		
 		public List<Link> getActiveLinks(){
-			return linkRepository.findByActive(true);
-		//	return linkRepository.findByActiveAndIsNew(true,true);
+			List<Link> links =  linkRepository.findByActiveTrue();
+			for(Link l :links) {
+				System.out.println(l.getContext());
+			}
+			return links;
 		}
 		
-		public List<Link> getNonActiveLinks(){
-			//return linkRepository.findByActive(true);
-			return linkRepository.findByActiveAndIsNew(false,true);
-		}
-		
-		
-		public List<Link> getOnlyNew(){
-			//return linkRepository.findByActive(true);
-			return linkRepository.findByIsNew(true);
-		}
-		
-		
-		public List<Link> getOnlyNewUrl(){
-			//return linkRepository.findByActive(true);
-			return linkRepository.findByIsNewUrl(true);
-		}
 		
 		@Transactional
 		public void update(List<Link> links) {

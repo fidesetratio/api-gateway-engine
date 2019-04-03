@@ -12,8 +12,8 @@ import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.stereotype.Component;
 
+import com.app.manager.model.Link;
 import com.application.locator.component.DBUrlComponent;
-import com.application.model.Link;
 
 @Component
 public class DBFilterInvoicationSecurityMetaData implements FilterInvocationSecurityMetadataSource{
@@ -32,26 +32,28 @@ public class DBFilterInvoicationSecurityMetaData implements FilterInvocationSecu
 		
 		FilterInvocation fi = (FilterInvocation) object;
 		String url = fi.getHttpRequest().getRequestURI();
-		logger.info("url1111:"+url);
+		logger.info("url : "+url);
+		
 		String path = calculatePath(url);
 		
 		if(excludeInternalMemory(path)){
 			return null;
-		}
+		};
 		
-;
+
+			
+		logger.info("all dbComponent:"+dbUrlComponent);
 		
-		System.out.println("all dbComponent:"+dbUrlComponent);
 		Link l = dbUrlComponent.get(path);
 		if(l != null){
 			logger.info("is permitable:"+l.isPermitAll());
 			if(l.isPermitAll()){
 			   def = null;	
 			}else{
-			List<String> roles = l.getRoles();
-			String[] rolesA = new String[roles.size()];
-			rolesA = roles.toArray(rolesA);
-			def = SecurityConfig.createList(rolesA);
+				List<String> roles = l.getRoles();
+				String[] rolesA = new String[roles.size()];
+				rolesA = roles.toArray(rolesA);
+				def = SecurityConfig.createList(rolesA);
 			};
 		}
 	
@@ -72,11 +74,8 @@ public class DBFilterInvoicationSecurityMetaData implements FilterInvocationSecu
 		
 		String segment[] = url.split("/");
 		if(segment.length>0){
-		
 			String urlCalculated = segment[1];
-
 			logger.info("calculate path:"+urlCalculated);
-			
 			return "/"+urlCalculated+"/**";
 		
 		}

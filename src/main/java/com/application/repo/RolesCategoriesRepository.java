@@ -2,7 +2,7 @@ package com.application.repo;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.application.model.RoleCategory;
+import com.app.manager.model.RoleCategory;
 
 public interface RolesCategoriesRepository extends CrudRepository<RoleCategory,Long>{
 

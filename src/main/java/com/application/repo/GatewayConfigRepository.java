@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.application.model.GatewayConfig;
+import com.app.manager.model.GatewayConfig;
 
 public interface GatewayConfigRepository extends CrudRepository<GatewayConfig,Long> {
-	public List<GatewayConfig> findByIsNew(boolean n);
+//	public List<GatewayConfig> findByIsNew(boolean n);
 }

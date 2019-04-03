@@ -8,7 +8,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.application.model.GatewayConfig;
+import com.app.manager.model.GatewayConfig;
 import com.application.repo.GatewayConfigRepository;
 
 
@@ -19,7 +19,8 @@ public class GatewayService {
 	
 	
 	public List<GatewayConfig> getOnlyNew(){
-		return gatewayConfigRepository.findByIsNew(true);
+		
+		return new ArrayList<GatewayConfig>();
 	}
 	
 	

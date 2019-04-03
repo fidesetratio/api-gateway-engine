@@ -49,12 +49,8 @@ public class SecurityDbConfiguration extends WebSecurityConfigurerAdapter{
 			.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
 			.and()
 			.addFilterAfter(new CustomAuthenticationFilter(remoteTokenServices()), UsernamePasswordAuthenticationFilter.class);
-		
-		
-
-		
-		
-			http.authorizeRequests().accessDecisionManager(affirmativeBased).anyRequest().authenticated().withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
+				
+			 http.authorizeRequests().accessDecisionManager(affirmativeBased).anyRequest().authenticated().withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
 
 				@Override
 				public <O extends FilterSecurityInterceptor> O postProcess(O fsi) {
