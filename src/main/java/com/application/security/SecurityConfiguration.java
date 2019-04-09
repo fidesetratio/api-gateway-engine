@@ -12,6 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.application.locator.component.DBUrlComponent;
 import com.application.security.filter.CustomAuthenticationFilter;
 
 @ConditionalOnProperty(name="gateway.locator", havingValue="prop")
@@ -23,6 +24,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 	  @Autowired
 	  private Environment env;
+	  
+	  @Autowired
+	  private DBUrlComponent dbUrlComponent;
 	  
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -37,7 +41,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.and()
 			.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
 			.and()
-			.addFilterAfter(new CustomAuthenticationFilter(remoteTokenServices()), UsernamePasswordAuthenticationFilter.class);
+			.addFilterAfter(new CustomAuthenticationFilter(remoteTokenServices(),dbUrlComponent,env), UsernamePasswordAuthenticationFilter.class);
 		
 			Integer total = Integer.parseInt(env.getProperty("gateway.locator.prop.limit"));
 			for(int i=1;i<=total;i++) {

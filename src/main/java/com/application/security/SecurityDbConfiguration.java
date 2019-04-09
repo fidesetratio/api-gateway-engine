@@ -20,6 +20,7 @@ import org.springframework.security.web.access.intercept.FilterInvocationSecurit
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.application.locator.component.DBUrlComponent;
 import com.application.security.filter.CustomAuthenticationFilter;
 
 @ConditionalOnProperty(name="gateway.locator", havingValue="db")
@@ -37,6 +38,9 @@ public class SecurityDbConfiguration extends WebSecurityConfigurerAdapter{
 	  @Autowired
 	  private FilterInvocationSecurityMetadataSource filter;
 	  
+	  @Autowired
+	  private DBUrlComponent dbUrlComponent;
+	  
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		
@@ -48,7 +52,7 @@ public class SecurityDbConfiguration extends WebSecurityConfigurerAdapter{
 			.and()
 			.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
 			.and()
-			.addFilterAfter(new CustomAuthenticationFilter(remoteTokenServices()), UsernamePasswordAuthenticationFilter.class);
+			.addFilterAfter(new CustomAuthenticationFilter(remoteTokenServices(),dbUrlComponent,env), UsernamePasswordAuthenticationFilter.class);
 				
 			 http.authorizeRequests().accessDecisionManager(affirmativeBased).anyRequest().authenticated().withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
 

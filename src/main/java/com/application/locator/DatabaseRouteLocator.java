@@ -79,6 +79,7 @@ public class DatabaseRouteLocator extends SimpleRouteLocator implements Refresha
 	
 	
 	protected Map<String, ZuulRoute> locateRoutes() {
+		logger.info("Database Router...");
 		LinkedHashMap<String, ZuulRoute> routesMap = new LinkedHashMap<String, ZuulRoute>();
 		List<Link> ls =  new ArrayList<Link>();
 		Map<String,ZuulRoute> oldRoute = super.locateRoutes();
@@ -122,10 +123,15 @@ public class DatabaseRouteLocator extends SimpleRouteLocator implements Refresha
 	
 	
 	private void reloadNewUrl() {
-   		List<Link> newchange = linkService.getActiveLinks();
-    	List<Link> ls =  new ArrayList<Link>();
+		logger.info("reloadNewUrl is new url ");
+   		dbUrlComponent.clearUrlMapLocator();
+		List<Link> newchange = linkService.getActiveLinks();
+   		logger.info("size: "+newchange.size());
+   		List<Link> ls =  new ArrayList<Link>();
 		if(newchange.size()>0) {
-   			for(Link l : newchange){
+			for(Link l : newchange){
+   				logger.info("l"+l.getRoles()+" :: "+l.isPermitAll());
+   				logger.info("pathl:"+l.getPath());
    				dbUrlComponent.put(l.getPath().trim(), l);
    			};
    		};
@@ -157,8 +163,11 @@ public class DatabaseRouteLocator extends SimpleRouteLocator implements Refresha
 	
 	
 	private void reloadProviderAuthentication() {
+		logger.info("reload reloadProviderAuthentication....");
+		dbUrlComponent.clearAuthenticationProviderMap();
 		List<AuthenticationProvider> providerList = authenticationProviderRepo.findByActiveTrue();
 		for(AuthenticationProvider provider:providerList) {
+			logger.info("reload providerId...."+provider.getProviderName());
 			dbUrlComponent.putProviderId(provider.getProviderId(),provider);
 		}
 	}

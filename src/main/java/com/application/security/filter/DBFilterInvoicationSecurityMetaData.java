@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import com.app.manager.model.Link;
 import com.application.locator.component.DBUrlComponent;
+import com.application.utils.Utility;
 
 @Component
 public class DBFilterInvoicationSecurityMetaData implements FilterInvocationSecurityMetadataSource{
@@ -43,7 +44,7 @@ public class DBFilterInvoicationSecurityMetaData implements FilterInvocationSecu
 
 			
 		logger.info("all dbComponent:"+dbUrlComponent);
-		
+		logger.info("path:"+path);
 		Link l = dbUrlComponent.get(path);
 		if(l != null){
 			logger.info("is permitable:"+l.isPermitAll());
@@ -51,9 +52,12 @@ public class DBFilterInvoicationSecurityMetaData implements FilterInvocationSecu
 			   def = null;	
 			}else{
 				List<String> roles = l.getRoles();
-				String[] rolesA = new String[roles.size()];
-				rolesA = roles.toArray(rolesA);
-				def = SecurityConfig.createList(rolesA);
+				if(roles.size()>0){
+					String[] rolesA = new String[roles.size()];
+					rolesA = roles.toArray(rolesA);
+					def = SecurityConfig.createList(rolesA);
+				 };
+				
 			};
 		}
 	
@@ -71,15 +75,7 @@ public class DBFilterInvoicationSecurityMetaData implements FilterInvocationSecu
 	
 	private String calculatePath(String url) {
 		// TODO Auto-generated method stub
-		
-		String segment[] = url.split("/");
-		if(segment.length>0){
-			String urlCalculated = segment[1];
-			logger.info("calculate path:"+urlCalculated);
-			return "/"+urlCalculated+"/**";
-		
-		}
-		return url;
+		return Utility.calculatePath(url);
 	}
 
 	@Override
