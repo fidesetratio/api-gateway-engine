@@ -35,6 +35,7 @@ public class DBFilterInvoicationSecurityMetaData implements FilterInvocationSecu
 		String url = fi.getHttpRequest().getRequestURI();
 		logger.info("url : "+url);
 		
+		
 		String path = calculatePath(url);
 		
 		if(excludeInternalMemory(path)){
@@ -46,6 +47,10 @@ public class DBFilterInvoicationSecurityMetaData implements FilterInvocationSecu
 		logger.info("all dbComponent:"+dbUrlComponent);
 		logger.info("path:"+path);
 		Link l = dbUrlComponent.get(path);
+		
+		dbUrlComponent.showListLink();
+		
+		
 		if(l != null){
 			logger.info("is permitable:"+l.isPermitAll());
 			if(l.isPermitAll()){
@@ -67,7 +72,8 @@ public class DBFilterInvoicationSecurityMetaData implements FilterInvocationSecu
 
 	
 	private boolean excludeInternalMemory(String url){
-		if(url.trim().equals("/gwadmin/**")){
+	
+		if(url.trim().startsWith("/gwadmin")){
 			return true;
 		}
 		return false;

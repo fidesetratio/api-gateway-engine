@@ -10,10 +10,12 @@ public class Utility {
 		// TODO Auto-generated method stub
 		
 		String segment[] = url.split("/");
-		if(segment.length>0){
-			String urlCalculated = segment[1];
+		if(segment.length>0 && !url.startsWith("/gwadmin")){
+			String cat=segment[1];
+			String urlCalculated = segment[2];
+			String urlCatThree = segment[3];
 			logger.info("calculate path:"+urlCalculated);
-			return "/"+urlCalculated+"/**";
+			return "/"+cat+"/"+urlCalculated+"/"+urlCatThree+"/**";
 		
 		}
 		return url;
