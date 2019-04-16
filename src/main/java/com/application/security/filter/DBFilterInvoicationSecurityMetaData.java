@@ -57,9 +57,14 @@ public class DBFilterInvoicationSecurityMetaData implements FilterInvocationSecu
 			   def = null;	
 			}else{
 				List<String> roles = l.getRoles();
+				
 				if(roles.size()>0){
+					
 					String[] rolesA = new String[roles.size()];
 					rolesA = roles.toArray(rolesA);
+					for(String r:rolesA) {
+					System.out.println("roles:"+r);
+					}
 					def = SecurityConfig.createList(rolesA);
 				 };
 				
