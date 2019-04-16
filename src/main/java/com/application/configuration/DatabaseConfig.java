@@ -1,6 +1,8 @@
 package com.application.configuration;
+import java.util.Arrays;
 import java.util.HashMap;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,8 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 
 @Configuration
 @EnableJpaRepositories(entityManagerFactoryRef = "entityManagerFactory",
@@ -66,4 +70,21 @@ public DataSource ds1Datasource() {
         transactionManager.setEntityManagerFactory(ds1EntityManager().getObject());
         return transactionManager;
     }
+  
+  
+  
+  @Bean
+  public MultipartResolver multipartResolver() {
+     return new StandardServletMultipartResolver() {
+       @Override
+       public boolean isMultipart(HttpServletRequest request) {
+          String method = request.getMethod().toLowerCase();
+          if (!Arrays.asList("put", "post").contains(method)) {
+             return false;
+          }
+          String contentType = request.getContentType();
+          return (contentType != null &&contentType.toLowerCase().startsWith("multipart/"));
+       }
+     };
+  }
 }
