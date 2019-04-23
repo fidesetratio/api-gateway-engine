@@ -1,0 +1,12 @@
+[Unit]
+Description=Spring Boot Web Application
+After=networking.service
+
+[Service]
+User=patartimotius
+ExecStart=/opt/workspace/workspace-api-gateway/api-gateway-engine/target/start.sh
+SuccessExitStatus=143
+WorkingDirectory=/opt/workspace/workspace-api-gateway/api-gateway-engine/target/
+
+[Install]
+WantedBy=multi-user.target
