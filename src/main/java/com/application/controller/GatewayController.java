@@ -39,7 +39,7 @@ public class GatewayController {
 
 		@RequestMapping("/reload")
 		public ResponseEntity<String> reload(){
-			String okDesc = "ok";
+			String okDesc = "okyeye";
 			refreshLocator.refreshRoute();
 			ResponseEntity<String> ok = new ResponseEntity<String>(okDesc,HttpStatus.OK);					
 			return ok;
