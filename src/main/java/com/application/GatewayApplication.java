@@ -45,7 +45,7 @@ public class GatewayApplication implements CommandLineRunner {
 
 		System.out.println("patar timotius ganteng");
 		// TODO Auto-generated method stub
-		/*  Link link = new Link(); 
+		Link link = new Link(); 
 		  link.setActive(true); 
 		  link.setContext("gallery");
 		  link.setUrl("https://www.google.co.id"); 
