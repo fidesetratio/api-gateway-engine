@@ -42,6 +42,8 @@ public class GatewayApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+
+		System.out.println("patar timotius ganteng");
 		// TODO Auto-generated method stub
 		/*  Link link = new Link(); 
 		  link.setActive(true); 
