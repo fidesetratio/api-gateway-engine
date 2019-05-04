@@ -43,9 +43,7 @@ public class GatewayApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		System.out.println("donald bebek");
-		for(int j=0;j<100;j++)
-		System.out.println("for inti j");
+		System.out.println("ini cuma testing dek");
 		
 		// TODO Auto-generated method stub
 		/*  Link link = new Link(); 
