@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import com.app.manager.model.Link;
 import com.application.repo.GatewayConfigRepository;
 import com.application.repo.LinkRepository;
 //curl -X POST -vu clientapp:123456 http://localhost:8181/oauth/token -H "Accept: application/json" -d "password=spring&username=roy&grant_type=password&scope=read%20write&client_secret=123456&client_id=clientapp"
@@ -43,20 +42,7 @@ public class GatewayApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-
-<<<<<<< HEAD
 		System.out.println("ini cuma testing dek");
-=======
-		
-		System.out.println("patar timotius ganteng");
-		
-		System.out.println("donald bebek");
-		for(int j=0;j<100;j++)
-		System.out.println("for inti j");
->>>>>>> refs/heads/mastertwo
-		
-		// TODO Auto-generated method stub
-		Link link = new Link(); 
 		/*
 		  link.setActive(true); 
 		  link.setContext("gallery");
