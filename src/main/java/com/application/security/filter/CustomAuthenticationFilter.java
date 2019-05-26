@@ -29,7 +29,6 @@ import com.application.utils.Utility;
  * it is extended from OncePerRequestFilter
  *
  */
-@Component
 public class CustomAuthenticationFilter extends OncePerRequestFilter{
 	
 	 private Logger logger = LoggerFactory.getLogger(CustomAuthenticationFilter.class);
@@ -97,6 +96,9 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter{
 	
 				OAuth2Authentication oauth2Authentication = remoteTokenServices.loadAuthentication(headerAuthorization);
 				if(oauth2Authentication != null) {
+					
+					System.out.println(oauth2Authentication.getOAuth2Request());
+					
 					SecurityContextHolder.getContext().setAuthentication(oauth2Authentication);
 				}
 			}catch(Exception e) {
