@@ -27,18 +27,16 @@ private Environment env;
 
 @Bean
 public DataSource ds1Datasource() {
-
     DriverManagerDataSource dataSource = new DriverManagerDataSource();
     dataSource.setDriverClassName(env.getProperty("spring.datasource.driver-class-name.1"));
     dataSource.setUrl(env.getProperty("spring.datasource.url.1"));
     dataSource.setUsername(env.getProperty("spring.datasource.username.1"));
     dataSource.setPassword(env.getProperty("spring.datasource.password.1"));
-
     return dataSource;
 }
 
 
-  @Bean(name = "entityManagerFactory")
+	@Bean(name = "entityManagerFactory")
     public LocalContainerEntityManagerFactoryBean ds1EntityManager() {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(ds1Datasource());

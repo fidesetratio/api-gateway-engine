@@ -25,16 +25,6 @@ import com.application.repo.LinkRepository;
 @EnableScheduling
 public class GatewayApplication implements CommandLineRunner {
 	
-	@Autowired 
-	private LinkRepository linkRepo;
-	 
-	@Autowired 
-	private GatewayConfigRepository gatewayRepo;
-	
-	
-	
-	
-	
 	
 	 public static void main(String[] args) {
 	        SpringApplication.run(GatewayApplication.class, args);
@@ -43,49 +33,6 @@ public class GatewayApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		System.out.println("ini cuma testing dek");
-		/*
-		  link.setActive(true); 
-		  link.setContext("gallery");
-		  link.setUrl("https://www.google.co.id"); 
-		  link.setServiceId("gallery");
-		  link.setPath("/gallery/**"); 
-		  link.setCreationDateTime(new Date());
-		  link.setNew(true);
-		  link.setNewUrl(true);
-		  link.setPermitAll(false);
-		  List<String> roles =new java.util.ArrayList<String>();
-		  roles.add("ROLE_USER");
-		  roles.add("ROLE_ADMIN");
-		  link.setRoles(roles);
-		  linkRepo.save(link);
-		  
-		  GatewayConfig config = new GatewayConfig();
-		  config.setKey("gateway.locator.prop.remote.token.services");
-		  config.setValue("http://localhost:9090/oauth/check_token");
-		  config.setActive(true);
-		  config.setCreationDateTime(new Date());
-		  config.setDescription("Token Authorization Url");
-		  config.setNew(true);
-		  
-		  gatewayRepo.save(config);
-		  config = new GatewayConfig();
-		  config.setKey("gateway.locator.prop.remote.token.clientid");
-		  config.setValue("clientapp");
-		  config.setActive(true);
-		  config.setCreationDateTime(new Date());
-		  config.setDescription("Client id application");
-		  config.setNew(true);
-	
-		  gatewayRepo.save(config);
-		  
-		  config = new GatewayConfig();
-		  config.setKey("gateway.locator.prop.remote.token.clientsecret");
-		  config.setValue("123456");
-		  config.setActive(true);
-		  config.setCreationDateTime(new Date());
-		  config.setDescription("Client secret");
-		  config.setNew(true);
-		  gatewayRepo.save(config);*/
 	}
 	
 }
