@@ -32,7 +32,6 @@ public class GatewayApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		System.out.println("ini cuma testing dek");
 	}
 	
 }
