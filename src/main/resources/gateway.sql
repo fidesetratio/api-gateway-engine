@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.26, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.27, for Linux (x86_64)
 --
 -- Host: localhost    Database: gateway
 -- ------------------------------------------------------
--- Server version	5.7.26-0ubuntu0.16.04.1
+-- Server version	5.7.27-0ubuntu0.16.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -40,7 +40,7 @@ CREATE TABLE `authentication_provider` (
 
 LOCK TABLES `authentication_provider` WRITE;
 /*!40000 ALTER TABLE `authentication_provider` DISABLE KEYS */;
-INSERT INTO `authentication_provider` VALUES (4,'Y','123456','clientapp','InternalProvider','oauth2','http://localhost:8787/oauth/check_token');
+INSERT INTO `authentication_provider` VALUES (4,'N','123456','clientapp','InternalProvider','oauth2','http://localhost:8787/oauth/check_token');
 /*!40000 ALTER TABLE `authentication_provider` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -66,7 +66,7 @@ CREATE TABLE `links` (
   `stripPrefix` varchar(255) DEFAULT NULL,
   `url` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`linkId`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -75,7 +75,6 @@ CREATE TABLE `links` (
 
 LOCK TABLES `links` WRITE;
 /*!40000 ALTER TABLE `links` DISABLE KEYS */;
-INSERT INTO `links` VALUES (13,'Y',1,'gallery','2019-05-04 18:26:42','/gallery/gallery/testing/**','Y',1,'ROLE_USER','Cookie;Set-Cookie','gallery','Y','https://www.google.co.id'),(14,'Y',1,'oauthtoken','2019-04-27 19:51:48','/gallery/oauth/token/**','Y',0,'ROLE_USER','Cookie;Set-Cookie','oauthtoken','Y','http://localhost:8787/oauth/token'),(15,'Y',1,'gallerymember','2019-05-04 18:30:11','/gallery/member/customer/**','N',4,'ROLE_USER','','gallerymember','Y','http://dummy.restapiexample.com/api/v1/employees'),(16,'Y',1,'upload','2019-04-16 22:49:43','/upload/upload/upload/**','Y',0,'ROLE_USER','','upload','Y','http://localhost:8383/uploadFile'),(17,'Y',1,'cheap','2019-05-18 19:42:40','/cheap/cheap/**','N',0,'ROLE_USER','','cheap','Y','http://www.google.co.id');
 /*!40000 ALTER TABLE `links` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -93,7 +92,7 @@ CREATE TABLE `roles` (
   PRIMARY KEY (`roleId`),
   KEY `FK5gs1esew9aj28627pj40dvmyn` (`category_id`),
   CONSTRAINT `FK5gs1esew9aj28627pj40dvmyn` FOREIGN KEY (`category_id`) REFERENCES `roles_categories` (`roleCategoryId`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -102,7 +101,6 @@ CREATE TABLE `roles` (
 
 LOCK TABLES `roles` WRITE;
 /*!40000 ALTER TABLE `roles` DISABLE KEYS */;
-INSERT INTO `roles` VALUES (3,'ROLE_WRITE',2);
 /*!40000 ALTER TABLE `roles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -119,7 +117,7 @@ CREATE TABLE `roles_categories` (
   `category_name` varchar(32) DEFAULT NULL,
   `creationDateTime` datetime DEFAULT NULL,
   PRIMARY KEY (`roleCategoryId`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -128,8 +126,32 @@ CREATE TABLE `roles_categories` (
 
 LOCK TABLES `roles_categories` WRITE;
 /*!40000 ALTER TABLE `roles_categories` DISABLE KEYS */;
-INSERT INTO `roles_categories` VALUES (2,'MPolicy','MPolicy','2019-04-06 09:18:34'),(3,'Problem Categroy','Problem','2019-05-18 19:40:24');
 /*!40000 ALTER TABLE `roles_categories` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tmp`
+--
+
+DROP TABLE IF EXISTS `tmp`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tmp` (
+  `roleCategoryId` bigint(20) NOT NULL DEFAULT '0',
+  `category_description` varchar(255) DEFAULT NULL,
+  `category_name` varchar(32) DEFAULT NULL,
+  `creationDateTime` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tmp`
+--
+
+LOCK TABLES `tmp` WRITE;
+/*!40000 ALTER TABLE `tmp` DISABLE KEYS */;
+INSERT INTO `tmp` VALUES (2,'MPolicy','MPolicy','2019-04-06 09:18:34'),(3,'Problem Categroy','Problem','2019-05-18 19:40:24');
+/*!40000 ALTER TABLE `tmp` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -141,4 +163,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-06-17 23:11:40
+-- Dump completed on 2019-08-02  6:06:45
