@@ -18,7 +18,8 @@ public class Utility {
 					String urlCalculated = segment[2];
 					String urlCatThree = segment[3];
 					logger.info("calculate path:"+urlCalculated);
-					return "/"+cat+"/"+urlCalculated+"/"+urlCatThree+"/**";
+					String det = "/"+cat+"/"+urlCalculated+"/"+urlCatThree+"/**";
+					return det;
 				};
 		};
 		}

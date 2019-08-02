@@ -56,10 +56,6 @@ public class DatabaseRouteLocator extends SimpleRouteLocator implements Refresha
 	 private GatewayService gatewayService;
 	 
 	 @Autowired
-	 private RemoteTokenServices tokenService;
-	 
-	 
-	 @Autowired
 	 private AuthenticationProviderRepository authenticationProviderRepo;
 	 
 	

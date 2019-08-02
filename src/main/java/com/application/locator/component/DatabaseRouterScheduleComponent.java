@@ -30,9 +30,6 @@ public class DatabaseRouterScheduleComponent {
 	 
 	 @Autowired
 	 private GatewayService gatewayService;
-	 
-	 @Autowired
-	 private RemoteTokenServices tokenService;
 	
 	 @Autowired
 	 private DBUrlComponent dbUrlComponent;

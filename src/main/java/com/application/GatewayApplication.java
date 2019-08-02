@@ -28,10 +28,12 @@ public class GatewayApplication implements CommandLineRunner {
 	
 	 public static void main(String[] args) {
 	        SpringApplication.run(GatewayApplication.class, args);
-	 }
+	 };
 
 	@Override
 	public void run(String... args) throws Exception {
+	
+		
 	}
 	
 }

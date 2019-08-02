@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.application.locator.component.DBUrlComponent;
@@ -68,11 +67,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	}
 	
 	@Bean
-	public RemoteTokenServices remoteTokenServices() {
-		RemoteTokenServices tokenServices = new RemoteTokenServices();
-		tokenServices.setClientId(env.getProperty("gateway.locator.prop.remote.token.clientid"));
-		tokenServices.setClientSecret(env.getProperty("gateway.locator.prop.remote.token.clientsecret"));
-		tokenServices.setCheckTokenEndpointUrl(env.getProperty("gateway.locator.prop.remote.token.services"));
+	public SinarmasMsigTokenRemoteServices remoteTokenServices() {
+		SinarmasMsigTokenRemoteServices tokenServices = new SinarmasMsigTokenRemoteServices();
 		return tokenServices;
 	}
 	

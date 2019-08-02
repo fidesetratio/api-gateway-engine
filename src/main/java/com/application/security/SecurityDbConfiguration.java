@@ -70,12 +70,12 @@ public class SecurityDbConfiguration extends WebSecurityConfigurerAdapter{
 	}
 	
 	@Bean
-	public RemoteTokenServices remoteTokenServices() {
-		RemoteTokenServices tokenServices = new RemoteTokenServices();
-		tokenServices.setClientId(env.getProperty("gateway.locator.prop.remote.token.clientid"));
+	public SinarmasMsigTokenRemoteServices remoteTokenServices() {
+		SinarmasMsigTokenRemoteServices tokenServices = new SinarmasMsigTokenRemoteServices();
+		/*tokenServices.setClientId(env.getProperty("gateway.locator.prop.remote.token.clientid"));
 		tokenServices.setClientSecret(env.getProperty("gateway.locator.prop.remote.token.clientsecret"));
 		tokenServices.setCheckTokenEndpointUrl(env.getProperty("gateway.locator.prop.remote.token.services"));
-		return tokenServices;
+	*/	return tokenServices;
 	}
 
 }
