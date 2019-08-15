@@ -30,11 +30,11 @@ public class Link {
 	
 	
 	
-	@Size(min=1, max=32, message="Context must be between 1 and 32 characters")
+	@Size(min=1, max=255, message="Context must be between 1 and 32 characters")
 	@Column(name="context", nullable=true, length=255)
 	private String context;
 	
-	@Size(min=1, max=32, message="Service Id must be between 1 and 32 characters")
+	@Size(min=1, max=255, message="Service Id must be between 1 and 32 characters")
 	@Column(name="service_id", nullable=true, length=255)
 	private String serviceId;
 	
@@ -76,7 +76,8 @@ public class Link {
 	private List<String> sensitiveHeaders = new ArrayList<String>();
 	
 	
-    
+	@Column(name="appId")
+	private Long appId;
 	
 	public Link(){
 		this.roles = new ArrayList<String>();
@@ -228,5 +229,15 @@ public class Link {
 
 	public void setSensitiveHeaders(List<String> sensitiveHeaders) {
 		this.sensitiveHeaders = sensitiveHeaders;
+	}
+
+
+	public Long getAppId() {
+		return appId;
+	}
+
+
+	public void setAppId(Long appId) {
+		this.appId = appId;
 	}
 }
