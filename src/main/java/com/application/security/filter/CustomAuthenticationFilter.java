@@ -100,6 +100,7 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter{
 				OAuth2Authentication oauth2Authentication = remoteTokenServices.loadAuthentication(headerAuthorization);
 				if(oauth2Authentication != null) {
 					System.out.println("request:"+oauth2Authentication.getOAuth2Request());
+					System.out.println("suksess");
 					SecurityContextHolder.getContext().setAuthentication(oauth2Authentication);
 				}
 			}catch(Exception e) {

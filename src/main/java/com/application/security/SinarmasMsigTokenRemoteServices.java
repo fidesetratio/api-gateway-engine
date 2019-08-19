@@ -57,7 +57,9 @@ public class SinarmasMsigTokenRemoteServices  implements ResourceServerTokenServ
 	    	String normalString = clientId+":"+clientSecret;
 	    	String encodedString = encoder.encodeToString(normalString.getBytes(StandardCharsets.UTF_8));
 	    	//http://localhost:8787/oauth/check_token
-	        headers.add("Authorization", "Basic "+encodedString);	        
+	        headers.add("Authorization", "Basic "+encodedString);	
+	        
+	        System.out.println("token ikut ngak nihh...");
 	        Map<String, Object> map = executeGet(this.url.trim()+"?token="+accessToken.trim(), headers);
 	        if (map == null || map.isEmpty() || map.get("error") != null) {
 	            throw new InvalidTokenException("Token not allowed");
