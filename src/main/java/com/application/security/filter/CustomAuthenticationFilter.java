@@ -1,6 +1,7 @@
 package com.application.security.filter;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -99,8 +100,21 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter{
 				
 				OAuth2Authentication oauth2Authentication = remoteTokenServices.loadAuthentication(headerAuthorization);
 				if(oauth2Authentication != null) {
+					
+					if( oauth2Authentication.getDetails() != null){
+						Map<String,Object> tambahanDetail = (Map<String,Object>)oauth2Authentication.getDetails();
+						if(tambahanDetail.get("aud")!=null){
+							System.out.println("aplikasi ini untuk berguna untuk validasi per client id :"+tambahanDetail.get("aud"));
+						}
+					};
+					
+					
+					System.out.println("oauth2 yeyeye"+oauth2Authentication.getDetails());
 					System.out.println("request:"+oauth2Authentication.getOAuth2Request());
 					System.out.println("suksess");
+					
+					
+					
 					SecurityContextHolder.getContext().setAuthentication(oauth2Authentication);
 				}
 			}catch(Exception e) {
