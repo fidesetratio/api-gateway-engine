@@ -32,10 +32,7 @@ public class CustomRemoteTokenServices {
 
 	public Authentication loadAuthentication(String accessToken)
 			 {
-		// TODO Auto-generated method stub
-		
-		System.out.println("hohehoeoeeoda");
-		
+	
 		HttpHeaders headers = new HttpHeaders();
 		if (headers.getContentType() == null) {
 			headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -46,14 +43,6 @@ public class CustomRemoteTokenServices {
 		formData.add(clientId, clientSecret);
 		Map map = restTemplate.exchange(this.checkTokenEndPoint, HttpMethod.POST,
 				new HttpEntity<MultiValueMap<String, String>>(formData, headers), Map.class).getBody();
-		
-		
-		System.out.println(map);
-		
-		
-		
-		//String pathUrl = this.checkTokenEndPoint+"?token="+accessToken;
-		
 		
 		
 		return null;

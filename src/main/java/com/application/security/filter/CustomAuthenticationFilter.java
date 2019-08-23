@@ -1,6 +1,7 @@
 package com.application.security.filter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Map;
 
 import javax.servlet.FilterChain;
@@ -99,24 +100,42 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter{
 			try {
 				
 				OAuth2Authentication oauth2Authentication = remoteTokenServices.loadAuthentication(headerAuthorization);
+				boolean allowedToCheck = true;
 				if(oauth2Authentication != null) {
 					
 					if( oauth2Authentication.getDetails() != null){
+
 						Map<String,Object> tambahanDetail = (Map<String,Object>)oauth2Authentication.getDetails();
+
 						if(tambahanDetail.get("aud")!=null){
-							System.out.println("aplikasi ini untuk berguna untuk validasi per client id :"+tambahanDetail.get("aud"));
+							if(tambahanDetail.get("aud") instanceof ArrayList){
+								ArrayList<String> arr = (ArrayList<String>)tambahanDetail.get("aud");
+								
+								if(l.isStrict()){
+									String resourceId = l.getResourceid();
+									if(!arr.contains(resourceId)){
+										allowedToCheck = false;
+									}
+									
+								}
+								
+								
+							}
+							
+							
+							}
 						}
 					};
 					
 					
-					System.out.println("oauth2 yeyeye"+oauth2Authentication.getDetails());
+					System.out.println("detailRequest:"+oauth2Authentication.getDetails());
 					System.out.println("request:"+oauth2Authentication.getOAuth2Request());
 					System.out.println("suksess");
 					
 					
-					
+					if(allowedToCheck)
 					SecurityContextHolder.getContext().setAuthentication(oauth2Authentication);
-				}
+				
 			}catch(Exception e) {
 				logger.error("error connection :"+e.getMessage());
 		//		e.printStackTrace();
