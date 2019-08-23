@@ -76,6 +76,16 @@ public class Link {
 	private List<String> sensitiveHeaders = new ArrayList<String>();
 	
 	
+	@Column(name="resourceid", nullable=true, length=255)
+	private String resourceid;
+	
+	
+	
+	
+	@Column(name="strict", nullable=true, length=255)
+	@Convert(converter=BooleanStringConverter.class)
+	private boolean strict;
+	
 	@Column(name="appId")
 	private Long appId;
 	
@@ -88,6 +98,9 @@ public class Link {
 		this.serviceId="";
 		this.url = null;
 		this.stripPrefix=true;
+		this.strict = false;
+		this.resourceid = "";
+		
 	}
 	
 	
@@ -239,5 +252,25 @@ public class Link {
 
 	public void setAppId(Long appId) {
 		this.appId = appId;
+	}
+
+
+	public String getResourceid() {
+		return resourceid;
+	}
+
+
+	public void setResourceid(String resourceid) {
+		this.resourceid = resourceid;
+	}
+
+
+	public boolean isStrict() {
+		return strict;
+	}
+
+
+	public void setStrict(boolean strict) {
+		this.strict = strict;
 	}
 }
