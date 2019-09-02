@@ -20,8 +20,6 @@ import org.springframework.security.oauth2.provider.token.ResourceServerTokenSer
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
-import ch.qos.logback.classic.Logger;
-
 
 
 public class SinarmasMsigTokenRemoteServices  implements ResourceServerTokenServices{
