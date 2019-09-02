@@ -10,7 +10,7 @@ public class Utility {
 		// TODO Auto-generated method stub;
 		String segment[] = url.split("/");
 
-		logger.info("url to calculate:"+url+"length berapa sih"+segment.length);
+		logger.info("url to calculate:"+url+ " count length = "+segment.length);
 		if(segment.length>0 && !url.startsWith("/gwadmin")){
 			if(segment.length >=4){
 				if(segment[1] != null && segment[2] != null && segment[3] != null){

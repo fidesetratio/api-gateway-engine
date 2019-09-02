@@ -53,47 +53,42 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter{
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("requestIp:"+request.getRequestURI());
+		buffer.append("\n");
 		String headerAuthorization = request.getHeader("Authorization");
-		logger.info("Authorization:"+headerAuthorization);
 		if(headerAuthorization != null )
 		{
-			
-			
+			buffer.append("authorization = yes");
+			buffer.append("\n");
 			if(headerAuthorization.contains("Bearer")) {
+					buffer.append("bearer = yes");
 					headerAuthorization = headerAuthorization.replaceAll("Bearer","");
 					headerAuthorization = headerAuthorization.trim();
-					logger.info("header:"+headerAuthorization);
-					logger.info("url : "+request.getRequestURI());
-	
+					buffer.append("bearer value ="+headerAuthorization);
+					buffer.append("\n");
 					String pathToCheck = Utility.calculatePath(request.getRequestURI());
-					logger.info("pathtocheck"+pathToCheck);
-					//dbUrlComponent.showListLink();
-					
+					buffer.append("validationUrl:"+pathToCheck);
+					buffer.append("\n");
 						Link l = dbUrlComponent.get(pathToCheck);
 						if(l != null){
-							logger.info("link exist with name:"+l.getServiceId());
+							buffer.append("service is exist value:"+l.getServiceId());
+							buffer.append("\n");
 							Long providerId = l.getProviderId();
 							AuthenticationProvider provider = dbUrlComponent.getProviderById(providerId);
 							if(provider != null){
-								logger.info("providerId:"+providerId);
-								logger.info("url:"+provider.getUrl());
-								logger.info("clientId:"+provider.getClientId());
-								logger.info("secretId:"+provider.getClientSecret());
+								buffer.append("provider is exist="+providerId);
+								buffer.append("\n");
+								buffer.append("provider url ="+provider.getUrl());
+								buffer.append("\n");
+								buffer.append("clientId ="+provider.getClientId());
+								buffer.append("\n");
+								buffer.append("secretId ="+provider.getClientSecret());
+								buffer.append("\n");
 								remoteTokenServices.setClientId(provider.getClientId().trim());
 								remoteTokenServices.setClientSecret(provider.getClientSecret().trim());
 								remoteTokenServices.setUrl(provider.getUrl().trim());
-								
-							//	remoteTokenServices.setCheckTokenEndpointUrl(provider.getUrl());
-						//		remoteTokenServices.setClientId(provider.getClientId());
-							//	remoteTokenServices.setClientId(provider.getClientSecret());
-								
-							}else{
-							//	remoteTokenServices.setClientId(env.getProperty("gateway.locator.prop.remote.token.clientid"));
-							//	remoteTokenServices.setClientSecret(env.getProperty("gateway.locator.prop.remote.token.clientsecret"));
-								//		remoteTokenServices.setCheckTokenEndpointUrl(env.getProperty("gateway.locator.prop.remote.token.services"));
-							
-							}
-							
+							};
 							
 						};
 						
@@ -110,7 +105,6 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter{
 						if(tambahanDetail.get("aud")!=null){
 							if(tambahanDetail.get("aud") instanceof ArrayList){
 								ArrayList<String> arr = (ArrayList<String>)tambahanDetail.get("aud");
-								
 								if(l.isStrict()){
 									String resourceId = l.getResourceid();
 									if(!arr.contains(resourceId)){
@@ -124,15 +118,24 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter{
 							
 							
 							}
+						
 						}
-					};
 					
 					
-					System.out.println("detailRequest:"+oauth2Authentication.getDetails());
-					System.out.println("request:"+oauth2Authentication.getOAuth2Request());
-					System.out.println("suksess");
+					buffer.append("Authentication is exist="+oauth2Authentication.getOAuth2Request());
+					buffer.append("\n");
+					buffer.append("Authentication Detail is="+oauth2Authentication.getDetails());
+					buffer.append("\n");
+						
+				};
 					
 					
+				
+					
+					
+				buffer.append("allowed to check? ="+allowedToCheck);
+				buffer.append("\n");
+				logger.info(buffer.toString());
 					if(allowedToCheck)
 					SecurityContextHolder.getContext().setAuthentication(oauth2Authentication);
 				

@@ -27,32 +27,28 @@ public class DBFilterInvoicationSecurityMetaData implements FilterInvocationSecu
 	@Override
 	public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
-		
+		StringBuffer buffer = new StringBuffer();
 		Collection<ConfigAttribute>  def = SecurityConfig.createList("NOT_ALLOWED_1");
 		
 		
 		FilterInvocation fi = (FilterInvocation) object;
 		String url = fi.getHttpRequest().getRequestURI();
-		logger.info("url : "+url);
-		
-		
+		buffer.append("url:"+url);
+		buffer.append("\n");
 		String path = calculatePath(url);
-		
 		if(excludeInternalMemory(path)){
 			return null;
 		};
-		
-
-			
-		logger.info("all dbComponent:"+dbUrlComponent);
-		logger.info("path:"+path);
+		buffer.append("path:"+path);
+		buffer.append("\n");
 		Link l = dbUrlComponent.get(path);
-		
-		dbUrlComponent.showListLink();
-		
-		
 		if(l != null){
-			logger.info("is permitable:"+l.isPermitAll());
+			buffer.append("path:"+path+" > "+l.getPath());
+			buffer.append("\n");
+		};
+		if(l != null){
+			buffer.append("permisible:"+l.isPermitAll());
+			buffer.append("\n");
 			if(l.isPermitAll()){
 			   def = null;	
 			}else{
@@ -65,14 +61,10 @@ public class DBFilterInvoicationSecurityMetaData implements FilterInvocationSecu
 				
 			};
 		}
-	
-		
+		logger.info(buffer.toString());
 		return def;
 	}
-
-	
 	private boolean excludeInternalMemory(String url){
-	
 		if(url.trim().startsWith("/gwadmin")){
 			return true;
 		}
@@ -80,13 +72,11 @@ public class DBFilterInvoicationSecurityMetaData implements FilterInvocationSecu
 	}
 	
 	private String calculatePath(String url) {
-		// TODO Auto-generated method stub
 		return Utility.calculatePath(url);
 	}
 
 	@Override
 	public Collection<ConfigAttribute> getAllConfigAttributes() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
