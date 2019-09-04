@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import com.app.manager.model.AuthenticationProvider;
 import com.app.manager.model.GatewayConfig;
 import com.app.manager.model.Link;
+import com.application.locator.component.CacheComponent;
 import com.application.locator.component.DBUrlComponent;
 import com.application.repo.AuthenticationProviderRepository;
 import com.application.services.GatewayService;
@@ -48,7 +49,7 @@ public class DatabaseRouteLocator extends SimpleRouteLocator implements Refresha
 	 
 	 
 	 @Autowired
-	 private DBUrlComponent dbUrlComponent;
+	 private CacheComponent dbUrlComponent;
 	 
 	 
 	 

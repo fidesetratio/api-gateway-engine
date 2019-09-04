@@ -32,6 +32,6 @@ public class DatabaseRouterScheduleComponent {
 	 private GatewayService gatewayService;
 	
 	 @Autowired
-	 private DBUrlComponent dbUrlComponent;
+	 private CacheComponent dbUrlComponent;
   
 }

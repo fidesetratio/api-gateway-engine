@@ -19,6 +19,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.app.manager.model.AuthenticationProvider;
 import com.app.manager.model.Link;
+import com.application.locator.component.CacheComponent;
 import com.application.locator.component.DBUrlComponent;
 import com.application.security.SinarmasMsigTokenRemoteServices;
 import com.application.utils.Utility;
@@ -35,13 +36,13 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter{
 	 private Logger logger = LoggerFactory.getLogger(CustomAuthenticationFilter.class);
     
 	 
-	 private DBUrlComponent dbUrlComponent;
+	 private CacheComponent dbUrlComponent;
 	 
 	  private Environment env;
 	 
 	
 	private  SinarmasMsigTokenRemoteServices remoteTokenServices;
-	 public CustomAuthenticationFilter(SinarmasMsigTokenRemoteServices remoteTokenServices,DBUrlComponent dbUrlComponent,Environment env) {
+	 public CustomAuthenticationFilter(SinarmasMsigTokenRemoteServices remoteTokenServices,CacheComponent dbUrlComponent,Environment env) {
 		// TODO Auto-generated constructor stub
 		 this.remoteTokenServices = remoteTokenServices;
 		 this.dbUrlComponent = dbUrlComponent;

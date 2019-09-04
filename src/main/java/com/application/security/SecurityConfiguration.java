@@ -11,7 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.application.locator.component.DBUrlComponent;
+import com.application.locator.component.CacheComponent;
 import com.application.security.filter.CustomAuthenticationFilter;
 
 @ConditionalOnProperty(name="gateway.locator", havingValue="prop")
@@ -25,7 +25,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	  private Environment env;
 	  
 	  @Autowired
-	  private DBUrlComponent dbUrlComponent;
+	  private CacheComponent dbUrlComponent;
 	  
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {

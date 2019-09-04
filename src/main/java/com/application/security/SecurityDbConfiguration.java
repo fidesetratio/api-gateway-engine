@@ -14,13 +14,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.application.locator.component.DBUrlComponent;
+import com.application.locator.component.CacheComponent;
 import com.application.security.filter.CustomAuthenticationFilter;
 
 @ConditionalOnProperty(name="gateway.locator", havingValue="db")
@@ -39,7 +38,7 @@ public class SecurityDbConfiguration extends WebSecurityConfigurerAdapter{
 	  private FilterInvocationSecurityMetadataSource filter;
 	  
 	  @Autowired
-	  private DBUrlComponent dbUrlComponent;
+	  private CacheComponent dbUrlComponent;
 	  
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {

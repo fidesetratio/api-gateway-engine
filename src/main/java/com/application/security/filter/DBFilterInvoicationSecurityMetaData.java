@@ -13,7 +13,7 @@ import org.springframework.security.web.access.intercept.FilterInvocationSecurit
 import org.springframework.stereotype.Component;
 
 import com.app.manager.model.Link;
-import com.application.locator.component.DBUrlComponent;
+import com.application.locator.component.CacheComponent;
 import com.application.utils.Utility;
 
 @Component
@@ -22,15 +22,13 @@ public class DBFilterInvoicationSecurityMetaData implements FilterInvocationSecu
 	private static Logger logger = LoggerFactory.getLogger(DBFilterInvoicationSecurityMetaData.class);
 	
 	 @Autowired
-	 private DBUrlComponent dbUrlComponent;
+	 private CacheComponent dbUrlComponent;
 	
 	@Override
 	public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		StringBuffer buffer = new StringBuffer();
 		Collection<ConfigAttribute>  def = SecurityConfig.createList("NOT_ALLOWED_1");
-		
-		
 		FilterInvocation fi = (FilterInvocation) object;
 		String url = fi.getHttpRequest().getRequestURI();
 		buffer.append("url:"+url);
