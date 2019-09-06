@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
@@ -22,6 +23,8 @@ import com.app.manager.model.Link;
 import com.application.locator.component.CacheComponent;
 import com.application.locator.component.DBUrlComponent;
 import com.application.security.SinarmasMsigTokenRemoteServices;
+import com.application.security.authentication.NotPermitAllAuthentication;
+import com.application.security.authentication.PermitAllAuthentication;
 import com.application.utils.Utility;
 /**
  * 
@@ -57,6 +60,36 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter{
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("requestIp:"+request.getRequestURI());
 		buffer.append("\n");
+		Authentication authentication = new NotPermitAllAuthentication();		
+		String pathToCheck = Utility.calculatePath(request.getRequestURI());
+		Link l = dbUrlComponent.get(pathToCheck);
+		buffer.append("path:"+pathToCheck);
+		buffer.append("\n");
+		if(l != null){
+			buffer.append("destination url:"+l.getUrl());
+			if(l.getUrl() != null){
+					if(l.isActive()){
+						 buffer.append("\n");
+						 buffer.append("Active:Y");
+								 if(l.isPermitAll()){
+									 buffer.append("\n");
+									 buffer.append("permit all:Y");
+									 authentication = new PermitAllAuthentication();
+								 }else{
+									 buffer.append("\n");
+									 buffer.append("permit all:N");
+								 }
+							
+					}else{
+						 buffer.append("\n");
+						 buffer.append("permit all:N");
+					}
+				
+			}
+			
+		}else{
+			buffer.append("destination url: none ");
+		}
 		String headerAuthorization = request.getHeader("Authorization");
 		if(headerAuthorization != null )
 		{
@@ -68,10 +101,10 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter{
 					headerAuthorization = headerAuthorization.trim();
 					buffer.append("bearer value ="+headerAuthorization);
 					buffer.append("\n");
-					String pathToCheck = Utility.calculatePath(request.getRequestURI());
+					
 					buffer.append("validationUrl:"+pathToCheck);
 					buffer.append("\n");
-						Link l = dbUrlComponent.get(pathToCheck);
+						//Link l = dbUrlComponent.get(pathToCheck);
 						if(l != null){
 							buffer.append("service is exist value:"+l.getServiceId());
 							buffer.append("\n");
@@ -113,12 +146,8 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter{
 									}
 									
 								}
-								
-								
 							}
-							
-							
-							}
+						}
 						
 						}
 					
@@ -127,7 +156,7 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter{
 					buffer.append("\n");
 					buffer.append("Authentication Detail is="+oauth2Authentication.getDetails());
 					buffer.append("\n");
-						
+					
 				};
 					
 					
@@ -147,29 +176,13 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter{
 			}
 			};
 		}
+			
 		
-		/*
-		 * Authentication authentication = tokenExtractor.extract(request);
-		 * if(authentication != null) {
-		 * 
-		 * }
-		 */	
-		/*
-		 * System.out.println("heihie"); String header =
-		 * request.getHeader("Authorization");
-		 * 
-		 * System.out.println("authorization:"+header);
-		 * 
-		 * if(header != null) { List<SimpleGrantedAuthority> listAuthorities = new
-		 * ArrayList<SimpleGrantedAuthority>(); listAuthorities.add(new
-		 * SimpleGrantedAuthority("ROLE_USER"));
-		 * 
-		 * 
-		 * 
-		 * UsernamePasswordAuthenticationToken authResult = new
-		 * UsernamePasswordAuthenticationToken("patar", "timotius",listAuthorities);
-		 * SecurityContextHolder.getContext().setAuthentication(authResult); };
-		 */
+		
+		if(!(authentication instanceof NotPermitAllAuthentication)){
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+		}
+		logger.info(buffer.toString());
 		
 		
 		
