@@ -61,11 +61,18 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter{
 		buffer.append("requestIp:"+request.getRequestURI());
 		buffer.append("\n");
 		Authentication authentication = new NotPermitAllAuthentication();		
+		
+		
+		if(excludeInternalMemory(request.getRequestURI().trim())) {
+			authentication = new PermitAllAuthentication();
+		}
+		
+		
 		String pathToCheck = Utility.calculatePath(request.getRequestURI());
 		Link l = dbUrlComponent.get(pathToCheck);
 		buffer.append("path:"+pathToCheck);
 		buffer.append("\n");
-		if(l != null){
+		if(l != null){	
 			buffer.append("destination url:"+l.getUrl());
 			if(l.getUrl() != null){
 					if(l.isActive()){
@@ -104,7 +111,6 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter{
 					
 					buffer.append("validationUrl:"+pathToCheck);
 					buffer.append("\n");
-						//Link l = dbUrlComponent.get(pathToCheck);
 						if(l != null){
 							buffer.append("service is exist value:"+l.getServiceId());
 							buffer.append("\n");
@@ -189,6 +195,13 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter{
 		
 		chain.doFilter(request, response);
 		
+	}
+	
+	private boolean excludeInternalMemory(String url){
+		if(url.trim().startsWith("/gwadmin")){
+			return true;
+		}
+		return false;
 	}
 
 }
