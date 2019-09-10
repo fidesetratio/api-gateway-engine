@@ -36,7 +36,9 @@ public class DBFilterInvoicationSecurityMetaData implements FilterInvocationSecu
 				if(auth.getAuthorities().size() == 1){
 					for(GrantedAuthority a:auth.getAuthorities()){
 						if(a.getAuthority().trim().toUpperCase().equals("ALLOWED")){
+							System.out.println("problem oiii");
 							def = null;
+							return def;
 						}
 					}
 					

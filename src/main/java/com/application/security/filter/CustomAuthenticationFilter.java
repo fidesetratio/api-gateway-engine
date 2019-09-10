@@ -85,9 +85,11 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter{
 								 }else{
 									 buffer.append("\n");
 									 buffer.append("permit all:N");
+									 authentication = new NotPermitAllAuthentication();
 								 }
 							
 					}else{
+						 authentication = new NotPermitAllAuthentication();
 						 buffer.append("\n");
 						 buffer.append("permit all:N");
 					}
@@ -97,8 +99,10 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter{
 		}else{
 			buffer.append("destination url: none ");
 		}
+		
+		
 		String headerAuthorization = request.getHeader("Authorization");
-		if(headerAuthorization != null )
+		if(headerAuthorization != null && l.isActive())
 		{
 			buffer.append("authorization = yes");
 			buffer.append("\n");
@@ -135,25 +139,27 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter{
 			try {
 				
 				OAuth2Authentication oauth2Authentication = remoteTokenServices.loadAuthentication(headerAuthorization);
+				
 				boolean allowedToCheck = true;
 				if(oauth2Authentication != null) {
-					
+					 authentication = new PermitAllAuthentication();
 					if( oauth2Authentication.getDetails() != null){
-
-						Map<String,Object> tambahanDetail = (Map<String,Object>)oauth2Authentication.getDetails();
-
-						if(tambahanDetail.get("aud")!=null){
-							if(tambahanDetail.get("aud") instanceof ArrayList){
-								ArrayList<String> arr = (ArrayList<String>)tambahanDetail.get("aud");
-								if(l.isStrict()){
-									String resourceId = l.getResourceid();
-									if(!arr.contains(resourceId)){
-										allowedToCheck = false;
+		
+								Map<String,Object> tambahanDetail = (Map<String,Object>)oauth2Authentication.getDetails();
+		
+								if(tambahanDetail.get("aud")!=null){
+									if(tambahanDetail.get("aud") instanceof ArrayList){
+										ArrayList<String> arr = (ArrayList<String>)tambahanDetail.get("aud");
+										if(l.isStrict()){
+											String resourceId = l.getResourceid();
+											if(!arr.contains(resourceId)){
+												allowedToCheck = false;
+												authentication = new NotPermitAllAuthentication();
+											}
+											
+										};
 									}
-									
 								}
-							}
-						}
 						
 						}
 					
@@ -163,7 +169,9 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter{
 					buffer.append("Authentication Detail is="+oauth2Authentication.getDetails());
 					buffer.append("\n");
 					
-				};
+				}else {
+					 authentication = new NotPermitAllAuthentication();
+				}
 					
 					
 				
@@ -172,9 +180,10 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter{
 				buffer.append("allowed to check? ="+allowedToCheck);
 				buffer.append("\n");
 				logger.info(buffer.toString());
-					if(allowedToCheck)
-					SecurityContextHolder.getContext().setAuthentication(oauth2Authentication);
-				
+					/*
+					 * if(allowedToCheck)
+					 * SecurityContextHolder.getContext().setAuthentication(oauth2Authentication);
+					 */
 			}catch(Exception e) {
 				logger.error("error connection :"+e.getMessage());
 		//		e.printStackTrace();
