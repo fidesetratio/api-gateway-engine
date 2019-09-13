@@ -1,5 +1,9 @@
 package com.application.utils;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.jboss.logging.Logger;
 
 public class Utility {
@@ -42,6 +46,16 @@ public class Utility {
 		}
 		return url;
 	}
-
+	public static boolean searchInArray(String[] searchedValue,String content[]){
+		boolean res = false;
+		Set asSet = new HashSet<>(Arrays.asList(content));
+	    int total = 0;
+		for(String s:searchedValue){
+			 if(asSet.contains(s)){
+				 total++;
+			 }
+		}
+		return total==searchedValue.length?true:false;
+	}
 
 }

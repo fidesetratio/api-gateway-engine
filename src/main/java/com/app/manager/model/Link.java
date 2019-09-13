@@ -79,9 +79,6 @@ public class Link {
 	@Column(name="resourceid", nullable=true, length=255)
 	private String resourceid;
 	
-	
-	
-	
 	@Column(name="strict", nullable=true, length=255)
 	@Convert(converter=BooleanStringConverter.class)
 	private boolean strict;

@@ -2,6 +2,7 @@ package com.application.security.filter;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.FilterChain;
@@ -9,19 +10,18 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.assertj.core.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.app.manager.model.AuthenticationProvider;
 import com.app.manager.model.Link;
 import com.application.locator.component.CacheComponent;
-import com.application.locator.component.DBUrlComponent;
 import com.application.security.SinarmasMsigTokenRemoteServices;
 import com.application.security.authentication.NotPermitAllAuthentication;
 import com.application.security.authentication.PermitAllAuthentication;
@@ -112,7 +112,6 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter{
 					headerAuthorization = headerAuthorization.trim();
 					buffer.append("bearer value ="+headerAuthorization);
 					buffer.append("\n");
-					
 					buffer.append("validationUrl:"+pathToCheck);
 					buffer.append("\n");
 						if(l != null){
@@ -142,26 +141,39 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter{
 				
 				boolean allowedToCheck = true;
 				if(oauth2Authentication != null) {
-					 authentication = new PermitAllAuthentication();
-					if( oauth2Authentication.getDetails() != null){
-		
-								Map<String,Object> tambahanDetail = (Map<String,Object>)oauth2Authentication.getDetails();
-		
-								if(tambahanDetail.get("aud")!=null){
-									if(tambahanDetail.get("aud") instanceof ArrayList){
-										ArrayList<String> arr = (ArrayList<String>)tambahanDetail.get("aud");
-										if(l.isStrict()){
-											String resourceId = l.getResourceid();
-											if(!arr.contains(resourceId)){
-												allowedToCheck = false;
-												authentication = new NotPermitAllAuthentication();
-											}
-											
-										};
-									}
-								}
-						
-						}
+					authentication = new PermitAllAuthentication();
+					if(oauth2Authentication.getDetails() != null){
+												Map<String,Object> tambahanDetail = (Map<String,Object>)oauth2Authentication.getDetails();
+												
+												if(tambahanDetail.get("aud")!=null){
+													if(tambahanDetail.get("aud") instanceof ArrayList){
+														ArrayList<String> arr = (ArrayList<String>)tambahanDetail.get("aud");
+														if(l.isStrict()){
+															String resourceId = l.getResourceid();
+															if(!arr.contains(resourceId)){
+																allowedToCheck = false;
+																authentication = new NotPermitAllAuthentication();
+															}
+														};
+													}
+												
+												}
+												
+												if(tambahanDetail.get("authorities") != null){
+													if(tambahanDetail.get("authorities") instanceof ArrayList){
+														ArrayList<String> arr = (ArrayList<String>)tambahanDetail.get("authorities");
+														List<String> roles = l.getRoles();
+														if(!roles.isEmpty()){
+															String searchedValue[] = roles.toArray(new String[roles.size()]);
+															String valuesRoles[] = arr.toArray(new String[arr.size()]);
+															if(!Utility.searchInArray(searchedValue, valuesRoles)){
+																authentication = new NotPermitAllAuthentication();
+															};
+														}
+													}
+												}
+					
+					}
 					
 					
 					buffer.append("Authentication is exist="+oauth2Authentication.getOAuth2Request());
