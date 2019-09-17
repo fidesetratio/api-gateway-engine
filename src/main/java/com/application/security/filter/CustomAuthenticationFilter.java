@@ -41,7 +41,7 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter{
 	 
 	 private CacheComponent dbUrlComponent;
 	 
-	  private Environment env;
+	 private Environment env;
 	 
 	
 	private  SinarmasMsigTokenRemoteServices remoteTokenServices;
@@ -192,13 +192,8 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter{
 				buffer.append("allowed to check? ="+allowedToCheck);
 				buffer.append("\n");
 				logger.info(buffer.toString());
-					/*
-					 * if(allowedToCheck)
-					 * SecurityContextHolder.getContext().setAuthentication(oauth2Authentication);
-					 */
 			}catch(Exception e) {
 				logger.error("error connection :"+e.getMessage());
-		//		e.printStackTrace();
 				SecurityContextHolder.clearContext();
 			}
 			};
@@ -209,10 +204,7 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter{
 		if(!(authentication instanceof NotPermitAllAuthentication)){
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 		}
-		logger.info(buffer.toString());
-		
-		
-		
+	
 		
 		chain.doFilter(request, response);
 		

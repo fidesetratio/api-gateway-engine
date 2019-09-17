@@ -1,10 +1,15 @@
 package com.application.utils;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.io.IOUtils;
 import org.jboss.logging.Logger;
+
+import com.netflix.zuul.context.RequestContext;
 
 public class Utility {
 	
@@ -57,5 +62,20 @@ public class Utility {
 		}
 		return total==searchedValue.length?true:false;
 	}
+	
+	 public static String getResponseData(RequestContext ctx) throws IOException {
+		  
+		 InputStream stream = RequestContext.getCurrentContext().getResponseDataStream();
+	        try {
+	            String body = IOUtils.toString(stream);
+	            System.err.println("response:"+body);
+	            return body;
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	        
+	        return "";
+	        
+		}
 
 }
