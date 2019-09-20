@@ -28,22 +28,29 @@ public class DBFilterInvoicationSecurityMetaData implements FilterInvocationSecu
 	@Override
 	public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
-		
+		FilterInvocation fi = (FilterInvocation) object;
+		String url = fi.getRequestUrl();
 		StringBuffer buffer = new StringBuffer();
+		buffer.append("url:"+url);
+		buffer.append("\n");
+		
 		Collection<ConfigAttribute>  def = SecurityConfig.createList("NOTALLOWED");
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if(auth != null){
 				if(auth.getAuthorities().size() == 1){
 					for(GrantedAuthority a:auth.getAuthorities()){
 						if(a.getAuthority().trim().toUpperCase().equals("ALLOWED")){
-							System.out.println("problem oiii");
 							def = null;
+							buffer.append("status url:allowed");
+							logger.info(buffer.toString());
 							return def;
 						}
 					}
 					
 				}
 		};
+		buffer.append("status url:not allowed");
+		logger.info(buffer.toString());
 		return def;
 		
 	}
