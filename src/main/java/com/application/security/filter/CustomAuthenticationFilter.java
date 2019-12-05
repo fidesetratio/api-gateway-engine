@@ -143,7 +143,6 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter{
 					authentication = new PermitAllAuthentication();
 					if(oauth2Authentication.getDetails() != null){
 												Map<String,Object> tambahanDetail = (Map<String,Object>)oauth2Authentication.getDetails();
-												
 												if(tambahanDetail.get("aud")!=null){
 													if(tambahanDetail.get("aud") instanceof ArrayList){
 														ArrayList<String> arr = (ArrayList<String>)tambahanDetail.get("aud");
@@ -155,9 +154,7 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter{
 															}
 														};
 													}
-												
 												}
-												
 												if(tambahanDetail.get("authorities") != null){
 													if(tambahanDetail.get("authorities") instanceof ArrayList){
 														ArrayList<String> arr = (ArrayList<String>)tambahanDetail.get("authorities");
